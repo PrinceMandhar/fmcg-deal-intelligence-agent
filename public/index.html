@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FMCG Deal Intelligence Agent</title>
+<style>
+  :root {
+    --navy: #1F4E78; --navy-light: #2E6DA4; --bg: #F7F8FA; --card: #FFFFFF;
+    --border: #E5E7EB; --text: #1F2937; --muted: #6B7280;
+    --green-bg:#DCFCE7; --green-text:#166534;
+    --yellow-bg:#FEF9C3; --yellow-text:#854D0E;
+    --red-bg:#FEE2E2; --red-text:#991B1B;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); }
+  .hero { background: linear-gradient(120deg, var(--navy) 0%, var(--navy-light) 100%); color: white; padding: 32px 24px; }
+  .hero-inner { max-width: 1100px; margin: 0 auto; }
+  .hero h1 { margin: 0 0 6px 0; font-size: 1.6rem; }
+  .hero p { margin: 0; opacity: .9; font-size: .95rem; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: 280px 1fr; gap: 24px; }
+  @media (max-width: 800px) { .wrap { grid-template-columns: 1fr; } }
+  .panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+  .panel h3 { margin-top: 0; font-size: 0.95rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  label { display:block; font-size: .82rem; font-weight: 600; margin: 12px 0 4px; }
+  select, input[type=date], input[type=range] { width: 100%; padding: 7px 8px; border-radius: 8px; border: 1px solid var(--border); font-size: .9rem; }
+  .row2 { display:flex; gap: 8px; }
+  .range-value { font-size: .78rem; color: var(--muted); }
+  button.run { width:100%; margin-top: 18px; background: var(--navy); color:white; border:none; padding: 12px; border-radius: 10px; font-weight:600; font-size: .95rem; cursor:pointer; }
+  button.run:hover { background: var(--navy-light); }
+  button.run:disabled { opacity: .6; cursor: not-allowed; }
+  .status-badge { display:inline-block; padding: 4px 10px; border-radius: 999px; font-size: .78rem; font-weight:600; margin-top: 4px; }
+  .status-on { background: var(--green-bg); color: var(--green-text); }
+  .status-off { background: #F3F4F6; color: #4B5563; }
+  .badge { display:inline-block; padding: 2px 9px; border-radius: 999px; font-size: .72rem; font-weight:600; }
+  .badge-high { background: var(--green-bg); color: var(--green-text); }
+  .badge-med { background: var(--yellow-bg); color: var(--yellow-text); }
+  .badge-low { background: var(--red-bg); color: var(--red-text); }
+  .deal-card { border:1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; background: #FAFBFC; }
+  .deal-card h4 { margin: 0 0 6px 0; font-size: .95rem; }
+  .deal-meta { font-size: .8rem; color: var(--muted); }
+  .exports { display:flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .exports a { text-decoration:none; background: white; border: 1px solid var(--border); padding: 9px 14px; border-radius: 8px; font-size: .85rem; color: var(--text); font-weight: 600; }
+  .exports a:hover { border-color: var(--navy); color: var(--navy); }
+  .empty { color: var(--muted); font-size: .9rem; padding: 30px 10px; text-align:center; }
+  .loading { display:flex; align-items:center; gap:10px; color: var(--navy); font-weight:600; padding: 20px 0; }
+  .spinner { width:18px; height:18px; border:3px solid #E5E7EB; border-top-color: var(--navy); border-radius:50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .summary-box { background:#F0F6FB; border-left:4px solid var(--navy); padding: 12px 16px; border-radius: 6px; font-size: .92rem; margin-bottom: 18px; }
+  .counts { display:flex; gap:14px; flex-wrap:wrap; margin-bottom: 16px; }
+  .count-chip { background:#F3F4F6; padding: 8px 12px; border-radius: 8px; font-size: .8rem; }
+  .count-chip b { display:block; font-size: 1.1rem; color: var(--navy); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <h1>📰 FMCG Deal Intelligence — Multi-Agent Newsletter System</h1>
+    <p>Supervisor → News Discovery → Cleaning → Date Filter → Deduplication → Relevance → Credibility → Deal Extraction → Newsletter</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="panel">
+    <h3>Run Settings</h3>
+
+    <label>📅 Show news from</label>
+    <select id="dateMode">
+      <option value="all" selected>All Time (no filter)</option>
+      <option value="today">Today</option>
+      <option value="last_30_days">Last 30 Days (Last Month till Date)</option>
+      <option value="ytd">This Year (Jan till Date)</option>
+      <option value="custom">Custom Range</option>
+    </select>
+
+    <div id="customRangeBox" style="display:none;">
+      <div class="row2">
+        <div>
+          <label>From</label>
+          <input type="date" id="fromDate" />
+        </div>
+        <div>
+          <label>Till</label>
+          <input type="date" id="toDate" />
+        </div>
+      </div>
+    </div>
+
+    <label>Max articles per RSS feed: <span id="maxItemsVal">25</span></label>
+    <input type="range" id="maxItems" min="5" max="60" value="25" />
+
+    <label>Relevance threshold: <span id="thresholdVal">0.35</span></label>
+    <input type="range" id="threshold" min="0" max="1" step="0.05" value="0.35" />
+
+    <label>🔑 LLM Extraction (Groq)</label>
+    <span id="groqStatus" class="status-badge status-off">Checking…</span>
+    <p style="font-size:.75rem; color:var(--muted); margin-top:6px;">Configured server-side via a Vercel Environment Variable — never entered here.</p>
+
+    <button class="run" id="runBtn">🚀 Run Pipeline</button>
+  </div>
+
+  <div class="panel" id="results">
+    <h3>Newsletter</h3>
+    <div class="empty">Set your options on the left and click <b>Run Pipeline</b> to fetch live FMCG deal news.</div>
+  </div>
+</div>
+
+<script>
+const API_BASE = ''; // same-origin on Vercel; change if hosting API separately
+
+const dateMode = document.getElementById('dateMode');
+const customBox = document.getElementById('customRangeBox');
+dateMode.addEventListener('change', () => {
+  customBox.style.display = dateMode.value === 'custom' ? 'block' : 'none';
+});
+
+const maxItems = document.getElementById('maxItems');
+maxItems.addEventListener('input', () => document.getElementById('maxItemsVal').textContent = maxItems.value);
+
+const threshold = document.getElementById('threshold');
+threshold.addEventListener('input', () => document.getElementById('thresholdVal').textContent = threshold.value);
+
+async function checkHealth() {
+  try {
+    const res = await fetch(`${API_BASE}/api/health`);
+    const data = await res.json();
+    const el = document.getElementById('groqStatus');
+    if (data.groq_configured) {
+      el.textContent = '● Active (backend key configured)';
+      el.className = 'status-badge status-on';
+    } else {
+      el.textContent = '○ Off (rule-based fallback)';
+      el.className = 'status-badge status-off';
+    }
+  } catch (e) {
+    document.getElementById('groqStatus').textContent = 'Unable to reach API';
+  }
+}
+checkHealth();
+
+function buildQuery() {
+  const params = new URLSearchParams({
+    max_items: maxItems.value,
+    threshold: threshold.value,
+    date_mode: dateMode.value,
+  });
+  if (dateMode.value === 'custom') {
+    const f = document.getElementById('fromDate').value;
+    const t = document.getElementById('toDate').value;
+    if (f) params.set('from_date', f);
+    if (t) params.set('to_date', t);
+  }
+  return params.toString();
+}
+
+function credBadgeClass(label) {
+  if (label.includes('High') && !label.includes('Medium')) return 'badge-high';
+  if (label.includes('Low')) return 'badge-low';
+  return 'badge-med';
+}
+
+async function runPipeline() {
+  const btn = document.getElementById('runBtn');
+  const results = document.getElementById('results');
+  btn.disabled = true;
+  btn.textContent = 'Running…';
+  results.innerHTML = `<h3>Newsletter</h3><div class="loading"><div class="spinner"></div> Fetching live news and running all 8 agents… this can take 15–30s.</div>`;
+
+  try {
+    const qs = buildQuery();
+    const res = await fetch(`${API_BASE}/api/run?${qs}`);
+    if (!res.ok) throw new Error(`API error ${res.status}`);
+    const data = await res.json();
+    renderResults(data, qs);
+  } catch (e) {
+    results.innerHTML = `<h3>Newsletter</h3><div class="empty">⚠️ ${e.message}. Please try again.</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🚀 Run Pipeline';
+  }
+}
+
+function renderResults(data, qs) {
+  const nl = data.newsletter || {};
+  const deals = nl.deals || [];
+  const counts = data.counts || {};
+
+  let html = `<h3>Newsletter</h3>`;
+  html += `<div class="counts">
+    <div class="count-chip"><b>${counts.raw ?? 0}</b>Raw</div>
+    <div class="count-chip"><b>${counts.deduped ?? 0}</b>After Dedup</div>
+    <div class="count-chip"><b>${counts.deals ?? 0}</b>Final Deals</div>
+  </div>`;
+
+  html += `<div class="summary-box">${nl.executive_summary || 'No summary generated.'}</div>`;
+
+  if (deals.length === 0) {
+    html += `<div class="empty">No deals passed the relevance threshold for this date range. Try widening the date filter or lowering the threshold.</div>`;
+  } else {
+    deals.forEach(d => {
+      const amount = (d.amount && d.amount !== '—') ? ` · ${d.amount}` : '';
+      html += `<div class="deal-card">
+        <h4>${d.title}</h4>
+        <div class="deal-meta">
+          🗓️ ${d.published || 'Date unknown'} &nbsp;|&nbsp;
+          ${(d.deal_type || '').replace('_',' ')}${amount} &nbsp;|&nbsp;
+          Source: ${d.source} <span class="badge ${credBadgeClass(d.credibility_label || '')}">${d.credibility_label || ''}</span>
+        </div>
+      </div>`;
+    });
+  }
+
+  html += `<div class="exports">
+    <a href="${API_BASE}/api/pdf?${qs}" target="_blank">📄 Download PDF</a>
+    <a href="${API_BASE}/api/csv?${qs}" target="_blank">🧾 Download CSV</a>
+  </div>`;
+
+  document.getElementById('results').innerHTML = html;
+}
+
+document.getElementById('runBtn').addEventListener('click', runPipeline);
+</script>
+
+</body>
+</html>

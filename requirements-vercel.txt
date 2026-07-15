@@ -1,0 +1,22 @@
+# Lightweight dependency set for the Vercel serverless API (api/index.py).
+#
+# Deliberately EXCLUDES scikit-learn, numpy, pandas, streamlit, and
+# langgraph — these push a Vercel Python function bundle close to/over its
+# size limit. The pipeline still works fully: dedup_agent.py automatically
+# falls back to a pure-stdlib `difflib`-based similarity check when
+# scikit-learn isn't installed (see agents/dedup_agent.py), and
+# supervisor.run_linear() doesn't require LangGraph.
+#
+# Use requirements.txt (the full set) for Streamlit Cloud / local runs,
+# where these size limits don't apply and you get the higher-quality
+# TF-IDF/semantic dedup.
+
+fastapi==0.115.0
+feedparser==6.0.11
+beautifulsoup4==4.12.3
+lxml==5.2.2
+python-dateutil==2.9.0
+reportlab==4.2.2
+groq==0.9.0
+httpx==0.27.2
+python-dotenv==1.0.1

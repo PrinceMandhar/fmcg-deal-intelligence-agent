@@ -1,0 +1,121 @@
+{
+  "query_context": "TEST RUN 2",
+  "run_started_at": "2026-07-15T06:31:28.726890",
+  "counts": {
+    "raw": 3,
+    "cleaned": 2,
+    "deduped": 2,
+    "relevant": 2,
+    "scored": 2,
+    "extracted_deals": 2
+  },
+  "agent_log": [
+    "[06:31:28] MOCK News Discovery Agent: loaded 3 mock articles",
+    "[06:31:28] Cleaning Agent: cleaned 3 articles, dropped 0 empty/malformed",
+    "[06:31:28] Date Filter Agent: 3 -> 2 articles within range (mode=last_30_days, 2026-06-15 06:31:28.727584 -> 2026-07-15 06:31:28.727584); 0 had unknown dates and were kept",
+    "[06:31:30] Deduplication Agent: 2 -> 2 after exact dedup -> 2 after near-duplicate removal (method: TF-IDF cosine)",
+    "[06:31:30] Relevance Agent: 2 deduped -> 2 relevant (threshold=0.35)",
+    "[06:31:30] Credibility Agent: scored 2 articles, avg credibility=0.89",
+    "[06:31:30] Deal Extraction Agent: extracted structured fields for 2 articles (heuristic fallback only (no GROQ_API_KEY set))",
+    "[06:31:30] Newsletter Agent: assembled newsletter with 2 deals"
+  ],
+  "newsletter": {
+    "generated_at": "15 Jul 2026, 06:31 UTC",
+    "executive_summary": "This edition tracks 2 notable FMCG deal-related developments, with 'acquisition' activity leading the pack. Highlights include movement around Hindustan Unilever to acquire D2C skincare brand Minimalist, Dabur India explores acquisition of herbal FMCG startup. As always, treat lower-credibility items as directional rather than confirmed.",
+    "deals": [
+      {
+        "title": "Hindustan Unilever to acquire D2C skincare brand Minimalist",
+        "deal_type": "acquisition",
+        "acquirer": "—",
+        "target": "—",
+        "amount": "Rs 2,955 crore",
+        "sector": "FMCG",
+        "country": "—",
+        "credibility_label": "High (Tier-1 wire/financial press)",
+        "credibility_score": 0.9,
+        "relevance_score": 1.0,
+        "source": "economictimes.indiatimes.com",
+        "link": "https://economictimes.indiatimes.com/hul-minimalist-deal",
+        "published": "15 Jul 2026"
+      },
+      {
+        "title": "Dabur India explores acquisition of herbal FMCG startup",
+        "deal_type": "acquisition",
+        "acquirer": "—",
+        "target": "—",
+        "amount": "—",
+        "sector": "FMCG",
+        "country": "—",
+        "credibility_label": "High (Tier-1 wire/financial press)",
+        "credibility_score": 0.88,
+        "relevance_score": 1.0,
+        "source": "business-standard.com",
+        "link": "https://www.business-standard.com/dabur-herbal-deal",
+        "published": "15 Jul 2026"
+      }
+    ],
+    "trend_snapshot": {
+      "acquisition": 2
+    }
+  },
+  "articles": [
+    {
+      "id": "a1",
+      "title": "Hindustan Unilever to acquire D2C skincare brand Minimalist",
+      "link": "https://economictimes.indiatimes.com/hul-minimalist-deal",
+      "summary": "HUL announced it will acquire a majority stake in Minimalist for Rs 2,955 crore.",
+      "published": "Wed, 15 Jul 2026 06:31:28 GMT",
+      "published_parsed": null,
+      "source_feed": "ET",
+      "domain": "economictimes.indiatimes.com",
+      "published_dt": "2026-07-15T06:31:28",
+      "published_display": "15 Jul 2026",
+      "cleaned_text": "Hindustan Unilever to acquire D2C skincare brand Minimalist. HUL announced it will acquire a majority stake in Minimalist for Rs 2,955 crore.",
+      "is_duplicate": false,
+      "duplicate_of": null,
+      "relevance_score": 1.0,
+      "is_relevant": true,
+      "credibility_score": 0.9,
+      "credibility_label": "High (Tier-1 wire/financial press)",
+      "deal": {
+        "acquirer": null,
+        "target": null,
+        "deal_type": "acquisition",
+        "amount": "Rs 2,955 crore",
+        "currency": null,
+        "sector": "FMCG",
+        "country": null,
+        "extraction_method": "heuristic_fallback"
+      }
+    },
+    {
+      "id": "a3",
+      "title": "Dabur India explores acquisition of herbal FMCG startup",
+      "link": "https://www.business-standard.com/dabur-herbal-deal",
+      "summary": "Dabur is reportedly in talks to acquire a minority stake in a herbal wellness startup.",
+      "published": "Wed, 15 Jul 2026 06:31:28 GMT",
+      "published_parsed": null,
+      "source_feed": "BS",
+      "domain": "business-standard.com",
+      "published_dt": "2026-07-15T06:31:28",
+      "published_display": "15 Jul 2026",
+      "cleaned_text": "Dabur India explores acquisition of herbal FMCG startup. Dabur is reportedly in talks to acquire a minority stake in a herbal wellness startup.",
+      "is_duplicate": false,
+      "duplicate_of": null,
+      "relevance_score": 1.0,
+      "is_relevant": true,
+      "credibility_score": 0.88,
+      "credibility_label": "High (Tier-1 wire/financial press)",
+      "deal": {
+        "acquirer": null,
+        "target": null,
+        "deal_type": "acquisition",
+        "amount": null,
+        "currency": null,
+        "sector": "FMCG",
+        "country": null,
+        "extraction_method": "heuristic_fallback"
+      }
+    }
+  ]
+}
