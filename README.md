@@ -1,4 +1,4 @@
-# 📰 FMCG Deal Intelligence — Multi-Agent Newsletter System
+# 📰 FMCG Deal Intelligence
 
 An agentic pipeline that watches public news for **FMCG M&A and investment
 activity**, cleans and deduplicates it, filters by date range, filters for
