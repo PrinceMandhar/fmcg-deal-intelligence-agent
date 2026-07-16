@@ -6,7 +6,7 @@ relevance, scores source credibility, extracts structured deal fields, and
 publishes a short, skimmable newsletter — as CSV, JSON, PDF, Word, Excel,
 and PowerPoint — with **two live demo options: Streamlit and Vercel**.
 
-**Streamlit demo:** https://fmcg-deal-intelligence-agent.streamlit.app/
+**Streamlit live:** https://fmcg-deal-intelligence-agent.streamlit.app/
 
 
 ---
